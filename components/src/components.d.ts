@@ -6,10 +6,19 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface ElasticLoader {
+    }
     interface ElasticStarRating {
+        "maxRating": number;
     }
 }
 declare global {
+    interface HTMLElasticLoaderElement extends Components.ElasticLoader, HTMLStencilElement {
+    }
+    var HTMLElasticLoaderElement: {
+        prototype: HTMLElasticLoaderElement;
+        new (): HTMLElasticLoaderElement;
+    };
     interface HTMLElasticStarRatingElement extends Components.ElasticStarRating, HTMLStencilElement {
     }
     var HTMLElasticStarRatingElement: {
@@ -17,13 +26,18 @@ declare global {
         new (): HTMLElasticStarRatingElement;
     };
     interface HTMLElementTagNameMap {
+        "elastic-loader": HTMLElasticLoaderElement;
         "elastic-star-rating": HTMLElasticStarRatingElement;
     }
 }
 declare namespace LocalJSX {
+    interface ElasticLoader {
+    }
     interface ElasticStarRating {
+        "maxRating"?: number;
     }
     interface IntrinsicElements {
+        "elastic-loader": ElasticLoader;
         "elastic-star-rating": ElasticStarRating;
     }
 }
@@ -31,6 +45,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "elastic-loader": LocalJSX.ElasticLoader & JSXBase.HTMLAttributes<HTMLElasticLoaderElement>;
             "elastic-star-rating": LocalJSX.ElasticStarRating & JSXBase.HTMLAttributes<HTMLElasticStarRatingElement>;
         }
     }

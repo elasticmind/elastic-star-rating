@@ -1,3 +1,16 @@
-:host {
-  display: block;
+.star-rating {
+  background-color: #eeeeee;
+  padding: 10px;
+}
+
+.display-mode-s {
+  width: 300px;
+}
+
+.display-mode-m {
+  width: 500px;
+}
+
+.display-mode-l {
+  width: 500px;
 }
