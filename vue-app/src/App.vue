@@ -5,7 +5,7 @@
     <p>
       This is my amazing Vue app. Not convinced? You have to rate it to see it!
     </p>
-    <my-component first="Stencil" last="'Don't call me a framework' JS"></my-component>
+    <elastic-star-rating :max-rating="5" style="position: absolute; top: 0;"></elastic-star-rating>
   </div>
 </template>
 

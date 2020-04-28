@@ -24,7 +24,7 @@ export class ElasticStarRating implements ComponentInterface {
   @Prop() maxRating: number;
 
   @State() userId: string;
-  @State() domain: string;
+  @State() host: string;
 
   @State() displayMode: number = DISPLAY_MODE_S;
   @State() isLoading: boolean = true;
@@ -41,7 +41,7 @@ export class ElasticStarRating implements ComponentInterface {
       Cookies.set(APPLICATION_KEY, this.userId)
     }
 
-    this.domain = document.domain;
+    this.host = location.host;
 
     new Promise((resolve) => {
       setTimeout(() => {
@@ -101,7 +101,7 @@ export class ElasticStarRating implements ComponentInterface {
               }
             </div>
             <div class="expander-wrapper">
-              <button type="button" class="expander" onClick={this.handleShowDetails.bind(this)} title={`${this.domain} - ${this.userId}`}>
+              <button type="button" class="expander" onClick={this.handleShowDetails.bind(this)} title={`${this.host} - ${this.userId}`}>
                 {this.displayMode === DISPLAY_MODE_L ? 'Hide details' : 'Show details'}
               </button>
               <div class="average">
