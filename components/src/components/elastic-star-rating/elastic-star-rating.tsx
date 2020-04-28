@@ -1,5 +1,7 @@
 import { Component, ComponentInterface, h, Prop, State, Listen, Element } from '@stencil/core';
 
+import { Ratings } from '../elastic-details/elastic-details';
+
 const DISPLAY_MODE_S = 0;
 const DISPLAY_MODE_M = 1;
 const DISPLAY_MODE_L = 2;
@@ -17,10 +19,11 @@ const displayModeClassesDictionary = {
 export class ElasticStarRating implements ComponentInterface {
   @Prop() maxRating: number;
 
-  @State() displayMode: number = 0;
+  @State() displayMode: number = DISPLAY_MODE_L;
   @State() isLoading: boolean = true;
   @State() userRating: number;
   @State() averageRating: number;
+  @State() ratings: Ratings = [0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 10, 0];
 
   @Element() el: HTMLElement;
 
@@ -60,7 +63,11 @@ export class ElasticStarRating implements ComponentInterface {
   }
 
   handleShowDetails() {
-    this.displayMode = DISPLAY_MODE_L;
+    if (this.displayMode === DISPLAY_MODE_M) {
+      this.displayMode = DISPLAY_MODE_L
+    } else if (this.displayMode === DISPLAY_MODE_L) {
+      this.displayMode = DISPLAY_MODE_M;
+    }
   }
 
   handleRating(rating) {
@@ -88,16 +95,16 @@ export class ElasticStarRating implements ComponentInterface {
                 />
               ))}
             </div>
-            <h2>
+            <h5>
               Average rating: {this.averageRating}
-            </h2>
-            <h3>
+            </h5>
+            <h5>
               User rating: {this.userRating}
-            </h3>
-            <h3>
-              Display mode: {this.displayMode}
-            </h3>
-            <a onClick={this.handleShowDetails.bind(this)}>Show details...</a>
+            </h5>
+            <a onClick={this.handleShowDetails.bind(this)}>
+              {this.displayMode === DISPLAY_MODE_L ? 'Hide details...' : 'Show details...'}
+            </a>
+            {this.displayMode === DISPLAY_MODE_L && <elastic-details ratings={this.ratings} />}
           </div>
         }
       </div>

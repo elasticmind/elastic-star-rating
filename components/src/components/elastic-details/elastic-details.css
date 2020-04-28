@@ -1,0 +1,35 @@
+.wrapper {
+  padding: 10px;
+}
+
+.rating {
+  display: flex;
+  margin-bottom: 9px;
+}
+
+.rating-label {
+  padding: 2px;
+  margin-right: 5px;
+  width: 10%;
+  text-align: right;
+}
+
+.bar-container {
+  flex-grow: 1;
+  display: flex;
+}
+
+.bar {
+  box-sizing: border-box;
+  background-color: yellow;
+  border: 1px solid rgb(163, 163, 23);
+  height: 80%;
+  align-self: center;
+  border-radius: 5px;
+}
+
+.rating-number {
+  padding: 2px;
+  margin-left: 5px;
+  font-weight: bold;
+}

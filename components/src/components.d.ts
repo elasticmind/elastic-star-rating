@@ -5,7 +5,11 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { Ratings, } from "./components/elastic-details/elastic-details";
 export namespace Components {
+    interface ElasticDetails {
+        "ratings": Ratings;
+    }
     interface ElasticLoader {
     }
     interface ElasticStarRating {
@@ -13,6 +17,12 @@ export namespace Components {
     }
 }
 declare global {
+    interface HTMLElasticDetailsElement extends Components.ElasticDetails, HTMLStencilElement {
+    }
+    var HTMLElasticDetailsElement: {
+        prototype: HTMLElasticDetailsElement;
+        new (): HTMLElasticDetailsElement;
+    };
     interface HTMLElasticLoaderElement extends Components.ElasticLoader, HTMLStencilElement {
     }
     var HTMLElasticLoaderElement: {
@@ -26,17 +36,22 @@ declare global {
         new (): HTMLElasticStarRatingElement;
     };
     interface HTMLElementTagNameMap {
+        "elastic-details": HTMLElasticDetailsElement;
         "elastic-loader": HTMLElasticLoaderElement;
         "elastic-star-rating": HTMLElasticStarRatingElement;
     }
 }
 declare namespace LocalJSX {
+    interface ElasticDetails {
+        "ratings"?: Ratings;
+    }
     interface ElasticLoader {
     }
     interface ElasticStarRating {
         "maxRating"?: number;
     }
     interface IntrinsicElements {
+        "elastic-details": ElasticDetails;
         "elastic-loader": ElasticLoader;
         "elastic-star-rating": ElasticStarRating;
     }
@@ -45,6 +60,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "elastic-details": LocalJSX.ElasticDetails & JSXBase.HTMLAttributes<HTMLElasticDetailsElement>;
             "elastic-loader": LocalJSX.ElasticLoader & JSXBase.HTMLAttributes<HTMLElasticLoaderElement>;
             "elastic-star-rating": LocalJSX.ElasticStarRating & JSXBase.HTMLAttributes<HTMLElasticStarRatingElement>;
         }
