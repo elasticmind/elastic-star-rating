@@ -19,7 +19,7 @@ const displayModeClassesDictionary = {
 export class ElasticStarRating implements ComponentInterface {
   @Prop() maxRating: number;
 
-  @State() displayMode: number = DISPLAY_MODE_M;
+  @State() displayMode: number = DISPLAY_MODE_S;
   @State() isLoading: boolean = true;
   @State() userRating: number;
   @State() averageRating: number;
@@ -93,7 +93,7 @@ export class ElasticStarRating implements ComponentInterface {
                 {this.averageRating}
               </div>
             </div>
-            {this.displayMode === DISPLAY_MODE_L && <elastic-details ratings={this.ratings} />}
+            {this.displayMode === DISPLAY_MODE_L && <elastic-details class="details" ratings={this.ratings} />}
           </div>
         }
       </div>

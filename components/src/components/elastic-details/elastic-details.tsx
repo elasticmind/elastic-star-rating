@@ -24,7 +24,7 @@ export class ElasticDetails implements ComponentInterface {
 
         content.push(<div class="rating">
           <div class="rating-label">
-            [{index + 1}]
+            {index + 1}
           </div>
           <div class="bar-container">
             <div class="bar" style={{ width: `${Math.max(percentage, 1)}%` }}>

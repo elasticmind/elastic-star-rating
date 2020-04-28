@@ -9,7 +9,7 @@ export class ElasticStars implements ComponentInterface {
   @Prop() maxRating: number;
   @Prop() value: number;
 
-  @State() ratingAnimationPointer: number = this.value;
+  @State() ratingAnimationPointer: number = this.value - 1;
 
   @Event() rate: EventEmitter<number>;
 
