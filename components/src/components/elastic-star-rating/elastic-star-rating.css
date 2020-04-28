@@ -1,16 +1,21 @@
 .star-rating {
   background-color: #eeeeee;
   padding: 10px;
+  display: inline-block;
+  position: fixed;
+  left: 0;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  transition: all .3s ease-out;
+  box-shadow: -5px 5px 5px -5px rgba(0, 0, 0, 0.4);
 }
 
 .display-mode-s {
-  width: 300px;
+  transform: translateX(calc(-100% + 40px));
 }
 
 .display-mode-m {
-  width: 500px;
 }
 
 .display-mode-l {
-  width: 500px;
 }

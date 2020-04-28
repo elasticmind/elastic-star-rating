@@ -12,8 +12,15 @@ export namespace Components {
     }
     interface ElasticLoader {
     }
+    interface ElasticStar {
+        "active": boolean;
+    }
     interface ElasticStarRating {
         "maxRating": number;
+    }
+    interface ElasticStars {
+        "maxRating": number;
+        "value": number;
     }
 }
 declare global {
@@ -29,16 +36,30 @@ declare global {
         prototype: HTMLElasticLoaderElement;
         new (): HTMLElasticLoaderElement;
     };
+    interface HTMLElasticStarElement extends Components.ElasticStar, HTMLStencilElement {
+    }
+    var HTMLElasticStarElement: {
+        prototype: HTMLElasticStarElement;
+        new (): HTMLElasticStarElement;
+    };
     interface HTMLElasticStarRatingElement extends Components.ElasticStarRating, HTMLStencilElement {
     }
     var HTMLElasticStarRatingElement: {
         prototype: HTMLElasticStarRatingElement;
         new (): HTMLElasticStarRatingElement;
     };
+    interface HTMLElasticStarsElement extends Components.ElasticStars, HTMLStencilElement {
+    }
+    var HTMLElasticStarsElement: {
+        prototype: HTMLElasticStarsElement;
+        new (): HTMLElasticStarsElement;
+    };
     interface HTMLElementTagNameMap {
         "elastic-details": HTMLElasticDetailsElement;
         "elastic-loader": HTMLElasticLoaderElement;
+        "elastic-star": HTMLElasticStarElement;
         "elastic-star-rating": HTMLElasticStarRatingElement;
+        "elastic-stars": HTMLElasticStarsElement;
     }
 }
 declare namespace LocalJSX {
@@ -47,13 +68,23 @@ declare namespace LocalJSX {
     }
     interface ElasticLoader {
     }
+    interface ElasticStar {
+        "active"?: boolean;
+    }
     interface ElasticStarRating {
         "maxRating"?: number;
+    }
+    interface ElasticStars {
+        "maxRating"?: number;
+        "onRate"?: (event: CustomEvent<number>) => void;
+        "value"?: number;
     }
     interface IntrinsicElements {
         "elastic-details": ElasticDetails;
         "elastic-loader": ElasticLoader;
+        "elastic-star": ElasticStar;
         "elastic-star-rating": ElasticStarRating;
+        "elastic-stars": ElasticStars;
     }
 }
 export { LocalJSX as JSX };
@@ -62,7 +93,9 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "elastic-details": LocalJSX.ElasticDetails & JSXBase.HTMLAttributes<HTMLElasticDetailsElement>;
             "elastic-loader": LocalJSX.ElasticLoader & JSXBase.HTMLAttributes<HTMLElasticLoaderElement>;
+            "elastic-star": LocalJSX.ElasticStar & JSXBase.HTMLAttributes<HTMLElasticStarElement>;
             "elastic-star-rating": LocalJSX.ElasticStarRating & JSXBase.HTMLAttributes<HTMLElasticStarRatingElement>;
+            "elastic-stars": LocalJSX.ElasticStars & JSXBase.HTMLAttributes<HTMLElasticStarsElement>;
         }
     }
 }

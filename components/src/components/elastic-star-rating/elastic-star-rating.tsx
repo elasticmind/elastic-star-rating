@@ -33,7 +33,6 @@ export class ElasticStarRating implements ComponentInterface {
         this.userRating = 3;
         this.averageRating = 4.4;
         this.isLoading = false;
-        this.handleRating(this.userRating);
         resolve()
       }, 10);
     })
@@ -70,31 +69,17 @@ export class ElasticStarRating implements ComponentInterface {
     }
   }
 
-  handleRating(rating) {
-    if (this.userRating !== rating) {
-      this.userRating = rating;
-    }
+  handleRating(event) {
+    this.userRating = event.detail;
   }
 
   render() {
-    const stars = new Array(this.maxRating).fill(null);
-
     return (
       <div class={`star-rating ${displayModeClassesDictionary[this.displayMode]}`}>
         {this.isLoading
           ? <elastic-loader class="loader" />
           : <div>
-            <div>
-              {stars.map((_, index) => (
-                <input
-                  type="checkbox"
-                  id={`rating-${index}`}
-                  name="rating"
-                  value={index}
-                  onChange={() => this.handleRating(index + 1)}
-                />
-              ))}
-            </div>
+            <elastic-stars max-rating={this.maxRating} value={this.userRating} onRate={this.handleRating.bind(this)}/>
             <h5>
               Average rating: {this.averageRating}
             </h5>
