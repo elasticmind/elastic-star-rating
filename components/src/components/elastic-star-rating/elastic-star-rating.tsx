@@ -1,6 +1,10 @@
 import { Component, ComponentInterface, h, Prop, State, Listen, Element } from '@stencil/core';
+import { v4 as uuidv4 } from 'uuid';
+import Cookies from 'cookies-js';
 
 import { Ratings } from '../elastic-details/elastic-details';
+
+const APPLICATION_KEY = '__ElasticStarRating__';
 
 const DISPLAY_MODE_S = 0;
 const DISPLAY_MODE_M = 1;
@@ -19,6 +23,9 @@ const displayModeClassesDictionary = {
 export class ElasticStarRating implements ComponentInterface {
   @Prop() maxRating: number;
 
+  @State() userId: string;
+  @State() domain: string;
+
   @State() displayMode: number = DISPLAY_MODE_S;
   @State() isLoading: boolean = true;
   @State() userRating: number;
@@ -28,6 +35,14 @@ export class ElasticStarRating implements ComponentInterface {
   @Element() el: HTMLElement;
 
   componentWillLoad() {
+    this.userId = Cookies.get(APPLICATION_KEY);
+    if (!this.userId) {
+      this.userId = uuidv4();
+      Cookies.set(APPLICATION_KEY, this.userId)
+    }
+
+    this.domain = document.domain;
+
     new Promise((resolve) => {
       setTimeout(() => {
         this.userRating = 3;
@@ -86,7 +101,7 @@ export class ElasticStarRating implements ComponentInterface {
               }
             </div>
             <div class="expander-wrapper">
-              <button type="button" class="expander" onClick={this.handleShowDetails.bind(this)}>
+              <button type="button" class="expander" onClick={this.handleShowDetails.bind(this)} title={`${this.domain} - ${this.userId}`}>
                 {this.displayMode === DISPLAY_MODE_L ? 'Hide details' : 'Show details'}
               </button>
               <div class="average">
