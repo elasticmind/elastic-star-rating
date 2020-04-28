@@ -6,8 +6,13 @@
   width: 25px;
   height: 25px;
   flex-shrink: 0;
+  transition: all 0.2s linear;
 }
 
 .star:not(:last-of-type) {
   margin-right: 5px;
+}
+
+.active {
+  transform: rotateZ(72deg) scale(1.1);
 }

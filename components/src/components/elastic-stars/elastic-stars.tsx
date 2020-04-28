@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, ComponentInterface, h, Prop, Event, EventEmitter, State } from '@stencil/core';
 
 @Component({
   tag: 'elastic-stars',
@@ -9,32 +9,37 @@ export class ElasticStars implements ComponentInterface {
   @Prop() maxRating: number;
   @Prop() value: number;
 
+  @State() ratingAnimationPointer: number = this.value;
+
   @Event() rate: EventEmitter<number>;
 
-  handleRating(rating) {
-    if (this.value !== rating) {
-      this.rate.emit(rating)
+  async handleRating(index) {
+    const stepRatingAnimation = async (i) => {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      this.ratingAnimationPointer = i;
     }
+
+    if (this.ratingAnimationPointer < index) {
+      for (let i = this.ratingAnimationPointer; i <= index; i++) {
+        await stepRatingAnimation(i)
+      }
+    } else {
+      for (let i = this.ratingAnimationPointer; index <= i; i--) {
+        await stepRatingAnimation(i)
+      }
+    }
+
+    this.rate.emit(index + 1)
   }
 
   render() {
-    const stars = new Array(this.maxRating).fill(null);
-
     return (
       <div class="stars">
-        {stars.map((_, index) => (
-          <elastic-star class="star" active={index <= this.value} />
-        ))}
-        {/* {stars.map((_, index) => (
-          <input
-            type="radio"
-            id={`rating-${index}`}
-            name="rating"
-            value={index}
-            checked={index + 1 === this.value}
-            onChange={() => this.handleRating(index + 1)}
-          />
-        ))} */}
+        {new Array(this.maxRating).fill(null).map((_, index) => {
+          const active = index <= this.ratingAnimationPointer;
+
+          return <elastic-star class={`star ${active && 'active'}`} active={active} onClick={() => this.handleRating(index)} />
+        })}
       </div>
     );
   }
