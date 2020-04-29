@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h, Prop, State, Listen, Element } from '@stencil/core';
+import { Component, ComponentInterface, h, Prop, State, Listen, Element, Watch } from '@stencil/core';
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'cookies-js';
 
@@ -21,7 +21,7 @@ const displayModeClassesDictionary = {
   shadow: true,
 })
 export class ElasticStarRating implements ComponentInterface {
-  @Prop() maxRating: number;
+  @Prop() maxRating: number = 5;
 
   @State() userId: string;
   @State() host: string;
@@ -35,6 +35,8 @@ export class ElasticStarRating implements ComponentInterface {
   @Element() el: HTMLElement;
 
   componentWillLoad() {
+    this.validateProps();
+
     this.userId = Cookies.get(APPLICATION_KEY);
     if (!this.userId) {
       this.userId = uuidv4();
@@ -51,6 +53,12 @@ export class ElasticStarRating implements ComponentInterface {
         resolve()
       }, 10);
     })
+  }
+
+  validateProps() {
+    if (this.maxRating < 3 || 10 < this.maxRating) {
+      throw new Error(`The property maxRating must be between 3 and 10, but received ${this.maxRating}.`);
+    }
   }
 
   @Listen('mouseover')
@@ -119,3 +127,19 @@ export class ElasticStarRating implements ComponentInterface {
     );
   }
 }
+
+// userRatings = {
+//   userId1: {
+//     host1: 3,
+//     host2: 4
+//   },
+//   userId2: {
+//     host2: 2,
+//     host3: 9
+//   },
+// }
+
+// hostRatings = {
+//   host1: [1, 2, 3, 4, 5],
+//   host2: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
+// }
