@@ -89,25 +89,29 @@ export class ElasticStarRating implements ComponentInterface {
   }
 
   render() {
+    const ContentUpper = () => <div class="stars-wrapper">
+      {this.displayMode === DISPLAY_MODE_S
+        ? <elastic-star class="star-decoration" active />
+        : <elastic-stars max-rating={this.maxRating} value={this.userRating} onRate={this.handleRating.bind(this)} />
+      }
+    </div>
+
+    const ContentLower = () => <div class="expander-wrapper">
+      <button type="button" class="expander" onClick={this.handleShowDetails.bind(this)} title={`${this.host} - ${this.userId}`}>
+        {this.displayMode === DISPLAY_MODE_L ? 'Hide details' : 'Show details'}
+      </button>
+      <div class="average">
+        {this.averageRating}
+      </div>
+    </div>
+
     return (
       <div class={`star-rating ${displayModeClassesDictionary[this.displayMode]}`}>
         {this.isLoading
           ? <elastic-loader class="loader" />
           : <div>
-            <div class="stars-wrapper">
-              {this.displayMode === DISPLAY_MODE_S
-                ? <elastic-star class="star-decoration" active />
-                : <elastic-stars max-rating={this.maxRating} value={this.userRating} onRate={this.handleRating.bind(this)} />
-              }
-            </div>
-            <div class="expander-wrapper">
-              <button type="button" class="expander" onClick={this.handleShowDetails.bind(this)} title={`${this.host} - ${this.userId}`}>
-                {this.displayMode === DISPLAY_MODE_L ? 'Hide details' : 'Show details'}
-              </button>
-              <div class="average">
-                {this.averageRating}
-              </div>
-            </div>
+            <ContentUpper/>
+            <ContentLower/>
             {this.displayMode === DISPLAY_MODE_L && <elastic-details class="details" ratings={this.ratings} />}
           </div>
         }
