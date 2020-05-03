@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'cookies-js';
 
 import { Ratings } from '../elastic-details/elastic-details';
+import { query, mutation } from '../../utils/graphql';
 
 const APPLICATION_KEY = '__ElasticStarRating__';
 
@@ -46,23 +47,9 @@ export class ElasticStarRating implements ComponentInterface {
     }
 
     this.host = location.host.replace(':', '_');
+    await mutation({ createTable: { host: this.host } });
 
-    console.log('test:', await fetch('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/test'));
-    // let url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query')
-    // let params = {query: '{greeting(firstName: "Jeremy")}'}
-    // url.search = new URLSearchParams(params).toString();
-    // console.log('graphql:', await (await fetch(url.toString())).json());
-
-    let url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/createTable');
-    let params = { query: `{createTable(host: "${this.host}")}` };
-    url.search = new URLSearchParams(params).toString();
-    console.log('createTable:', await (await fetch(url.toString())).json());
-
-    url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query')
-    params = { query: `{rating(host: "${this.host}", userId: "${this.userId}"), average(host: "${this.host}"), details(host: "${this.host}")}` }
-    url.search = new URLSearchParams(params).toString();
-    const response = await (await fetch(url.toString())).json()
-    console.log('everything:', response);
+    const response = await query({ rating: { host: this.host, userId: this.userId }, average: { host: this.host } });
     this.userRating = response.data.rating;
     this.averageRating = response.data.average;
     this.isLoading = false;
@@ -101,10 +88,7 @@ export class ElasticStarRating implements ComponentInterface {
   async handleShowDetails() {
     if (this.displayMode === DISPLAY_MODE_M) {
       this.displayMode = DISPLAY_MODE_L;
-      const url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query');
-      const params = { query: `{details(host: "${this.host}")}` };
-      url.search = new URLSearchParams(params).toString();
-      const response = await (await fetch(url.toString())).json();
+      const response = await query({ details: { host: this.host } });
       this.ratings = JSON.parse(response.data.details);
     } else if (this.displayMode === DISPLAY_MODE_L) {
       this.displayMode = DISPLAY_MODE_M;
@@ -113,10 +97,7 @@ export class ElasticStarRating implements ComponentInterface {
   }
 
   async handleRating(event) {
-    const url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query');
-    const params = { query: `mutation {rate(host: "${this.host}", userId: "${this.userId}", rating: ${event.detail})}` };
-    url.search = new URLSearchParams(params).toString();
-    console.log('rating:', await (await fetch(url.toString())).json());
+    await mutation({ rate: { host: this.host, userId: this.userId, rating: event.detail } });
     this.userRating = event.detail;
   }
 

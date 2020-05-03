@@ -34,17 +34,3 @@ functions:
           path: query
           method: get
           cors: true
-  createTable:
-    handler: handler.query
-    events:
-      - http:
-          path: createTable
-          method: get
-          cors: true
-  hello:
-    handler: handler2.hello
-    events:
-      - http:
-          path: test
-          method: get
-          cors: true
