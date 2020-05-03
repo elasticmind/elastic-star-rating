@@ -45,9 +45,6 @@ export class ElasticStarRating implements ComponentInterface {
 
     this.host = location.host.replace(':', '_');
 
-    this.userRating = 3;
-    this.averageRating = 4.4;
-    this.isLoading = false;
     console.log('test:', await fetch('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/test'));
     // let url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query')
     // let params = {query: '{greeting(firstName: "Jeremy")}'}
@@ -60,11 +57,13 @@ export class ElasticStarRating implements ComponentInterface {
     console.log('createTable:', await (await fetch(url.toString())).json());
 
     url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query')
-    params = {query: `{getRating(host: "${this.host}", userId: "${this.userId}")}`}
+    params = {query: `{rating(host: "${this.host}", userId: "${this.userId}"), average(host: "${this.host}", userId: "${this.userId}")}`}
     url.search = new URLSearchParams(params).toString();
     const response = await (await fetch(url.toString())).json()
-    console.log('userRating:', response.data.getRating);
-    this.userRating = response.data.getRating;
+    console.log('userRating:', response);
+    this.userRating = response.data.rating;
+    this.averageRating = response.data.average;
+    this.isLoading = false;
   }
 
   validateProps() {

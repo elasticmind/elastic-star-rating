@@ -5,6 +5,7 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLInt,
+  GraphQLFloat,
   GraphQLNonNull
 } = require('graphql')
 
@@ -55,6 +56,20 @@ async function getRating(host, userId) {
   return result.Item.rating;
 }
 
+async function getAverage(host, userId) {
+  const dynamoDBDocumentClient = new AWS.DynamoDB.DocumentClient();
+
+  const result = await dynamoDBDocumentClient.scan({
+    TableName: host,
+    ProjectionExpression: "rating",
+  }).promise();
+
+  const ratingSum = result.Items.reduce((sum, {rating}) => sum + rating, 0);
+  const ratingCount = result.Items.length;
+
+  return ratingSum/ratingCount;
+}
+
 async function rate(host, userId, rating) {
   const dynamoDBDocumentClient = new AWS.DynamoDB.DocumentClient();
 
@@ -82,13 +97,21 @@ const schema = new GraphQLSchema({
         // resolve to a greeting message
         resolve: (parent, args) => getGreeting(args.firstName)
       },
-      getRating: {
+      rating: {
         args: {
           host: { name: 'host', type: new GraphQLNonNull(GraphQLString) },
           userId: { name: 'userId', type: new GraphQLNonNull(GraphQLString) },
         },
         type: GraphQLInt,
         resolve: (parent, args) => getRating(args.host, args.userId)
+      },
+      average: {
+        args: {
+          host: { name: 'host', type: new GraphQLNonNull(GraphQLString) },
+          userId: { name: 'userId', type: new GraphQLNonNull(GraphQLString) },
+        },
+        type: GraphQLFloat,
+        resolve: (parent, args) => getAverage(args.host, args.userId)
       },
       createTable: {
         args: { host: { name: 'host', type: new GraphQLNonNull(GraphQLString), defaultValue: 'unknown' } },
