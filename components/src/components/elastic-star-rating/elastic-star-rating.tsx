@@ -50,7 +50,7 @@ export class ElasticStarRating implements ComponentInterface {
     await mutation({ createTable: { host: this.host } });
 
     const response = await query({ rating: { host: this.host, userId: this.userId }, average: { host: this.host } });
-    this.userRating = response.data.rating;
+    this.userRating = response.data.rating || 0;
     this.averageRating = response.data.average;
     this.isLoading = false;
   }
@@ -114,7 +114,7 @@ export class ElasticStarRating implements ComponentInterface {
         {this.displayMode === DISPLAY_MODE_L ? 'Hide details' : 'Show details'}
       </button>
       <div class="average">
-        {this.averageRating.toFixed(1)}
+        {this.averageRating && this.averageRating.toFixed(1)}
       </div>
     </div>
 
