@@ -8,6 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { Ratings, } from "./components/elastic-details/elastic-details";
 export namespace Components {
     interface ElasticDetails {
+        "maxRating": number;
         "ratings": Ratings;
     }
     interface ElasticLoader {
@@ -64,6 +65,7 @@ declare global {
 }
 declare namespace LocalJSX {
     interface ElasticDetails {
+        "maxRating"?: number;
         "ratings"?: Ratings;
     }
     interface ElasticLoader {

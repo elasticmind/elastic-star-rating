@@ -1,6 +1,6 @@
 import { Component, ComponentInterface, h, Prop, State } from '@stencil/core';
 
-export type Ratings = number[];
+export type Ratings = { [key: string]: number };
 
 @Component({
   tag: 'elastic-details',
@@ -8,29 +8,29 @@ export type Ratings = number[];
   shadow: true,
 })
 export class ElasticDetails implements ComponentInterface {
+  @Prop() maxRating: number;
   @Prop() ratings: Ratings;
+
   @State() totalRatings: number;
   @State() percentages: number[];
 
   componentWillRender() {
-    this.totalRatings = this.ratings.reduce((sum, rating) => sum + rating, 0);
-    this.percentages = this.ratings.map((rating) => rating / this.totalRatings);
+    this.totalRatings = Object.values(this.ratings).reduce((sum, rating) => sum + rating, 0);
+    this.percentages = new Array(this.maxRating).fill(0).map((_, index) => ((index + 1) in this.ratings) ? (this.ratings[index + 1] / this.totalRatings) : 0)
   }
 
   render() {
     return <div class="wrapper">
-      {this.ratings.reduceRight((content, rating, index) => {
-        const percentage = Number((this.percentages[index] * 100).toFixed(2));
-
+      {this.percentages.reduceRight((content, percentage, index) => {
         content.push(<div class="rating">
           <div class="rating-label">
             {index + 1}
           </div>
           <div class="bar-container">
-            <div class="bar" style={{ width: `${Math.max(percentage, 1)}%` }}>
+            <div class="bar" style={{ width: `${(percentage * 80).toFixed(2)}%` }}>
             </div>
             <div class="rating-number">
-              {rating}
+              {this.ratings[index + 1]}
             </div>
           </div>
         </div>)

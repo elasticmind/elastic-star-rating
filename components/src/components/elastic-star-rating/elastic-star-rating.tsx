@@ -30,7 +30,7 @@ export class ElasticStarRating implements ComponentInterface {
   @State() isLoading: boolean = true;
   @State() userRating: number;
   @State() averageRating: number;
-  @State() ratings: Ratings = [0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 10, 0];
+  @State() ratings: Ratings;
 
   @Element() el: HTMLElement;
 
@@ -57,12 +57,13 @@ export class ElasticStarRating implements ComponentInterface {
     console.log('createTable:', await (await fetch(url.toString())).json());
 
     url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query')
-    params = {query: `{rating(host: "${this.host}", userId: "${this.userId}"), average(host: "${this.host}", userId: "${this.userId}")}`}
+    params = {query: `{rating(host: "${this.host}", userId: "${this.userId}"), average(host: "${this.host}"), details(host: "${this.host}")}`}
     url.search = new URLSearchParams(params).toString();
     const response = await (await fetch(url.toString())).json()
-    console.log('userRating:', response);
+    console.log('everything:', response);
     this.userRating = response.data.rating;
     this.averageRating = response.data.average;
+    this.ratings = JSON.parse(response.data.details);
     this.isLoading = false;
   }
 
@@ -124,7 +125,7 @@ export class ElasticStarRating implements ComponentInterface {
         {this.displayMode === DISPLAY_MODE_L ? 'Hide details' : 'Show details'}
       </button>
       <div class="average">
-        {this.averageRating}
+        {this.averageRating.toFixed(1)}
       </div>
     </div>
 
@@ -135,7 +136,7 @@ export class ElasticStarRating implements ComponentInterface {
           : <div>
             <ContentUpper />
             <ContentLower />
-            {this.displayMode === DISPLAY_MODE_L && <elastic-details class="details" ratings={this.ratings} />}
+            {this.displayMode === DISPLAY_MODE_L && <elastic-details class="details" maxRating={this.maxRating} ratings={this.ratings} />}
           </div>
         }
       </div>
