@@ -10,7 +10,9 @@ provider:
       Action:
         - dynamodb:GetItem
         - dynamodb:UpdateItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+        - dynamodb:Scan
+        - dynamodb:CreateTable
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/*"
 
 resources:
   Resources:
@@ -22,20 +24,7 @@ resources:
           gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
         ResponseType: DEFAULT_4XX
         RestApiId:
-          Ref: 'ApiGatewayRestApi'  
-    NicknamesTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: firstName
-            AttributeType: S
-        KeySchema:
-          - AttributeName: firstName
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+          Ref: 'ApiGatewayRestApi'
 
 functions:
   query:
@@ -43,6 +32,13 @@ functions:
     events:
       - http:
           path: query
+          method: get
+          cors: true
+  createTable:
+    handler: handler.query
+    events:
+      - http:
+          path: createTable
           method: get
           cors: true
   hello:

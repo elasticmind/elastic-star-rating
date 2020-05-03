@@ -43,17 +43,21 @@ export class ElasticStarRating implements ComponentInterface {
       Cookies.set(APPLICATION_KEY, this.userId)
     }
 
-    this.host = location.host;
+    this.host = location.host.replace(':', '_');
 
     this.userRating = 3;
     this.averageRating = 4.4;
     this.isLoading = false;
     console.log('test:', await fetch('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/test'));
-    const url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query')
-    const params = {query: '{greeting(firstName: "Jeremy")}'}
-    url.search = new URLSearchParams(params).toString();
+    // let url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query')
+    // let params = {query: '{greeting(firstName: "Jeremy")}'}
+    // url.search = new URLSearchParams(params).toString();
+    // console.log('graphql:', await (await fetch(url.toString())).json());
 
-    console.log('graphql:', await (await fetch(url.toString())).json());
+    const url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/createTable');
+    const params = { query: `{createTable(host: "${this.host}")}` };
+    url.search = new URLSearchParams(params).toString();
+    console.log('createTable:', await (await fetch(url.toString())).json());
   }
 
   validateProps() {
@@ -93,7 +97,11 @@ export class ElasticStarRating implements ComponentInterface {
     }
   }
 
-  handleRating(event) {
+  async handleRating(event) {
+    const url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query');
+    const params = { query: `mutation{rate(userId: "${this.userId}"), rating: "${event.detail}")}` };
+    url.search = new URLSearchParams(params).toString();
+    console.log('createTable:', await (await fetch(url.toString())).json());
     this.userRating = event.detail;
   }
 

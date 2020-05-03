@@ -4,47 +4,62 @@ const {
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLString,
+  GraphQLNumber,
   GraphQLNonNull
 } = require('graphql')
 
 const AWS = require('aws-sdk');
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-const promisify = foo => new Promise((resolve, reject) => {
-  foo((error, result) => {
-    if (error) {
-      reject(error)
+async function createTable(host) {
+  const dynamoDB = new AWS.DynamoDB();
+  const params = {
+    TableName: host,
+    KeySchema: [
+      { AttributeName: "userId", KeyType: "HASH" },
+      { AttributeName: "rating", KeyType: "RANGE" }
+    ],
+    AttributeDefinitions: [
+      { AttributeName: "userId", AttributeType: "S" },
+      { AttributeName: "rating", AttributeType: "N" },
+    ],
+    ProvisionedThroughput: {
+      ReadCapacityUnits: 10,
+      WriteCapacityUnits: 10
+    }
+  };
+
+  await dynamoDB.createTable(params, function (err, data) {
+    if (err) {
+      return `Unable to create table. Error JSON: ${JSON.stringify(err, null, 2)}`;
     } else {
-      resolve(result)
+      return `Created table. Table description JSON: ${JSON.stringify(data, null, 2)}`;
     }
-  })
-})
+  }).promise();
+}
 
-// replace previous implementation of getGreeting
-const getGreeting = firstName => promisify(callback =>
-  dynamoDb.get({
-    TableName: process.env.DYNAMODB_TABLE,
-    Key: { firstName },
-  }, callback))
-  .then(result => {
-    if (!result.Item) {
-      return firstName
-    }
-    return result.Item.nickname
-  })
-  .then(name => `Hello, ${name}.`)
+async function getGreeting(firstName) {
+  const dynamoDBDocumentClient = new AWS.DynamoDB.DocumentClient();
+  // const result = await dynamoDBDocumentClient.get({
+  //   TableName: process.env.DYNAMODB_TABLE,
+  //   Key: { firstName },
+  // }).promise();
+  return `Hello, ${/*result ? result.Item.nickname :*/ firstName}.`;
+}
 
-// add method for updates
-const changeNickname = (firstName, nickname) => promisify(callback =>
-  dynamoDb.update({
-    TableName: process.env.DYNAMODB_TABLE,
-    Key: { firstName },
-    UpdateExpression: 'SET nickname = :nickname',
-    ExpressionAttributeValues: {
-      ':nickname': nickname
-    }
-  }, callback))
-  .then(() => nickname)
+// async function rate(userId, rating) {
+//   const dynamoDBDocumentClient = new AWS.DynamoDB.DocumentClient();
+  
+//   await dynamoDBDocumentClient.update({
+//     TableName: process.env.DYNAMODB_TABLE,
+//     Key: { userId },
+//     UpdateExpression: 'SET rating = :rating',
+//     ExpressionAttributeValues: {
+//       ':rating': rating,
+//     }
+//   });
+
+//   return process.env.DYNAMODB_TABLE;
+// }
 
 // Here we declare the schema and resolvers for the query
 const schema = new GraphQLSchema({
@@ -54,11 +69,16 @@ const schema = new GraphQLSchema({
       // the query has a field called 'greeting'
       greeting: {
         // we need to know the user's name to greet them
-        args: { firstName: { name: 'firstName', type: new GraphQLNonNull(GraphQLString), defaultValue: 'somlói' } },
+        args: { firstName: { name: 'firstName', type: new GraphQLNonNull(GraphQLString), defaultValue: 'unknown' } },
         // the greeting message is a string
         type: GraphQLString,
         // resolve to a greeting message
-        resolve: (parent, args) => getGreeting(args.firstName || "randomUser")
+        resolve: (parent, args) => getGreeting(args.firstName)
+      },
+      createTable: {
+        args: { host: { name: 'host', type: new GraphQLNonNull(GraphQLString), defaultValue: 'unknown' } },
+        type: GraphQLString,
+        resolve: (parent, args) => createTable(args.host)
       }
     }
   }),
@@ -74,7 +94,15 @@ const schema = new GraphQLSchema({
         type: GraphQLString,
         // update the nickname
         resolve: (parent, args) => changeNickname(args.firstName, args.nickname)
-      }
+      },
+      // rate: {
+      //   args: {
+      //     userId: { name: 'userId', type: new GraphQLNonNull(GraphQLString) },
+      //     rating: { name: 'rating', type: new GraphQLNonNull(GraphQLNumber) },
+      //   },
+      //   type: GraphQLString,
+      //   resolve: (parent, args) => rate(args.userId, args.rating)
+      // }
     }
   })
 })
