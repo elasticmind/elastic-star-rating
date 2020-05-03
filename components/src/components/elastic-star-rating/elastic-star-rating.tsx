@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h, Prop, State, Listen, Element, Watch } from '@stencil/core';
+import { Component, ComponentInterface, h, Prop, State, Listen, Element } from '@stencil/core';
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'cookies-js';
 
@@ -34,7 +34,7 @@ export class ElasticStarRating implements ComponentInterface {
 
   @Element() el: HTMLElement;
 
-  componentWillLoad() {
+  async componentWillLoad() {
     this.validateProps();
 
     this.userId = Cookies.get(APPLICATION_KEY);
@@ -45,14 +45,15 @@ export class ElasticStarRating implements ComponentInterface {
 
     this.host = location.host;
 
-    new Promise((resolve) => {
-      setTimeout(() => {
-        this.userRating = 3;
-        this.averageRating = 4.4;
-        this.isLoading = false;
-        resolve()
-      }, 10);
-    })
+    this.userRating = 3;
+    this.averageRating = 4.4;
+    this.isLoading = false;
+    console.log('test:', await fetch('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/test'));
+    const url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query')
+    const params = {query: '{greeting(firstName: "Jeremy")}'}
+    url.search = new URLSearchParams(params).toString();
+
+    console.log('graphql:', await (await fetch(url.toString())).json());
   }
 
   validateProps() {
@@ -118,8 +119,8 @@ export class ElasticStarRating implements ComponentInterface {
         {this.isLoading
           ? <elastic-loader class="loader" />
           : <div>
-            <ContentUpper/>
-            <ContentLower/>
+            <ContentUpper />
+            <ContentLower />
             {this.displayMode === DISPLAY_MODE_L && <elastic-details class="details" ratings={this.ratings} />}
           </div>
         }
@@ -143,3 +144,11 @@ export class ElasticStarRating implements ComponentInterface {
 //   host1: [1, 2, 3, 4, 5],
 //   host2: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
 // }
+
+/*
+endpoints: fetchUserRating, fetchHostAverage, fetchHostRatings
+rateHost
+
+
+
+*/
