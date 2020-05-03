@@ -44,6 +44,17 @@ async function getGreeting(firstName) {
   return `Hello, ${/*result ? result.Item.nickname :*/ firstName}.`;
 }
 
+async function getRating(host, userId) {
+  const dynamoDBDocumentClient = new AWS.DynamoDB.DocumentClient();
+
+  const result = await dynamoDBDocumentClient.get({
+    TableName: host,
+    Key: { userId },
+  }).promise();
+
+  return result.Item.rating;
+}
+
 async function rate(host, userId, rating) {
   const dynamoDBDocumentClient = new AWS.DynamoDB.DocumentClient();
 
@@ -70,6 +81,14 @@ const schema = new GraphQLSchema({
         type: GraphQLString,
         // resolve to a greeting message
         resolve: (parent, args) => getGreeting(args.firstName)
+      },
+      getRating: {
+        args: {
+          host: { name: 'host', type: new GraphQLNonNull(GraphQLString) },
+          userId: { name: 'userId', type: new GraphQLNonNull(GraphQLString) },
+        },
+        type: GraphQLInt,
+        resolve: (parent, args) => getRating(args.host, args.userId)
       },
       createTable: {
         args: { host: { name: 'host', type: new GraphQLNonNull(GraphQLString), defaultValue: 'unknown' } },

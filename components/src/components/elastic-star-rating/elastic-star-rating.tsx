@@ -54,10 +54,17 @@ export class ElasticStarRating implements ComponentInterface {
     // url.search = new URLSearchParams(params).toString();
     // console.log('graphql:', await (await fetch(url.toString())).json());
 
-    const url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/createTable');
-    const params = { query: `{createTable(host: "${this.host}")}` };
+    let url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/createTable');
+    let params = { query: `{createTable(host: "${this.host}")}` };
     url.search = new URLSearchParams(params).toString();
     console.log('createTable:', await (await fetch(url.toString())).json());
+
+    url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query')
+    params = {query: `{getRating(host: "${this.host}", userId: "${this.userId}")}`}
+    url.search = new URLSearchParams(params).toString();
+    const response = await (await fetch(url.toString())).json()
+    console.log('userRating:', response.data.getRating);
+    this.userRating = response.data.getRating;
   }
 
   validateProps() {
