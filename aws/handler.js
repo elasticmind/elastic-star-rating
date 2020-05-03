@@ -4,7 +4,7 @@ const {
   GraphQLSchema,
   GraphQLObjectType,
   GraphQLString,
-  GraphQLNumber,
+  GraphQLInt,
   GraphQLNonNull
 } = require('graphql')
 
@@ -16,11 +16,9 @@ async function createTable(host) {
     TableName: host,
     KeySchema: [
       { AttributeName: "userId", KeyType: "HASH" },
-      { AttributeName: "rating", KeyType: "RANGE" }
     ],
     AttributeDefinitions: [
       { AttributeName: "userId", AttributeType: "S" },
-      { AttributeName: "rating", AttributeType: "N" },
     ],
     ProvisionedThroughput: {
       ReadCapacityUnits: 10,
@@ -46,20 +44,18 @@ async function getGreeting(firstName) {
   return `Hello, ${/*result ? result.Item.nickname :*/ firstName}.`;
 }
 
-// async function rate(userId, rating) {
-//   const dynamoDBDocumentClient = new AWS.DynamoDB.DocumentClient();
-  
-//   await dynamoDBDocumentClient.update({
-//     TableName: process.env.DYNAMODB_TABLE,
-//     Key: { userId },
-//     UpdateExpression: 'SET rating = :rating',
-//     ExpressionAttributeValues: {
-//       ':rating': rating,
-//     }
-//   });
+async function rate(host, userId, rating) {
+  const dynamoDBDocumentClient = new AWS.DynamoDB.DocumentClient();
 
-//   return process.env.DYNAMODB_TABLE;
-// }
+  await dynamoDBDocumentClient.update({
+    TableName: host,
+    Key: { userId },
+    UpdateExpression: 'SET rating = :rating',
+    ExpressionAttributeValues: {
+      ':rating': rating,
+    }
+  }).promise();
+}
 
 // Here we declare the schema and resolvers for the query
 const schema = new GraphQLSchema({
@@ -85,24 +81,15 @@ const schema = new GraphQLSchema({
   mutation: new GraphQLObjectType({
     name: 'RootMutationType', // an arbitrary name
     fields: {
-      changeNickname: {
+      rate: {
         args: {
-          // we need the user's first name as well as a preferred nickname
-          firstName: { name: 'firstName', type: new GraphQLNonNull(GraphQLString) },
-          nickname: { name: 'nickname', type: new GraphQLNonNull(GraphQLString) }
+          host: { name: 'host', type: new GraphQLNonNull(GraphQLString) },
+          userId: { name: 'userId', type: new GraphQLNonNull(GraphQLString) },
+          rating: { name: 'rating', type: new GraphQLNonNull(GraphQLInt) },
         },
         type: GraphQLString,
-        // update the nickname
-        resolve: (parent, args) => changeNickname(args.firstName, args.nickname)
+        resolve: (parent, args) => rate(args.host, args.userId, args.rating)
       },
-      // rate: {
-      //   args: {
-      //     userId: { name: 'userId', type: new GraphQLNonNull(GraphQLString) },
-      //     rating: { name: 'rating', type: new GraphQLNonNull(GraphQLNumber) },
-      //   },
-      //   type: GraphQLString,
-      //   resolve: (parent, args) => rate(args.userId, args.rating)
-      // }
     }
   })
 })

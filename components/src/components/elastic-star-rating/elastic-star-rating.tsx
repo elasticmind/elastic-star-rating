@@ -99,9 +99,9 @@ export class ElasticStarRating implements ComponentInterface {
 
   async handleRating(event) {
     const url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query');
-    const params = { query: `mutation{rate(userId: "${this.userId}"), rating: "${event.detail}")}` };
+    const params = { query: `mutation {rate(host: "${this.host}", userId: "${this.userId}", rating: ${event.detail})}` };
     url.search = new URLSearchParams(params).toString();
-    console.log('createTable:', await (await fetch(url.toString())).json());
+    console.log('rating:', await (await fetch(url.toString())).json());
     this.userRating = event.detail;
   }
 
