@@ -55,3 +55,9 @@
   align-items: center;
   justify-content: center;
 }
+
+.loader {
+  display: block;
+  width: 20px;
+  height: 40px;
+}

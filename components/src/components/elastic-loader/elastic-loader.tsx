@@ -1,4 +1,4 @@
-import { Component, ComponentInterface, h } from '@stencil/core';
+import { Component, ComponentInterface, h, Host } from '@stencil/core';
 
 @Component({
   tag: 'elastic-loader',
@@ -9,12 +9,20 @@ export class ElasticLoader implements ComponentInterface {
 
   render() {
     return (
-      <div class="wrapper">
-        <div class="loader" />
-        <div class="loader" />
-        <div class="loader" />
-        <div class="loader" />
-      </div>
+      <Host>
+        <div class="loader">
+          <div/>
+        </div>
+        <div class="loader">
+          <div/>
+        </div>
+        <div class="loader">
+          <div/>
+        </div>
+        <div class="loader">
+          <div/>
+        </div>
+      </Host>
     );
   }
 

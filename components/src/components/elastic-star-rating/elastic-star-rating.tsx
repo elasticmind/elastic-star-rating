@@ -36,7 +36,9 @@ export class ElasticStarRating implements ComponentInterface {
 
   async componentWillLoad() {
     this.validateProps();
+  }
 
+  async componentDidLoad() {
     this.userId = Cookies.get(APPLICATION_KEY);
     if (!this.userId) {
       this.userId = uuidv4();
@@ -57,13 +59,12 @@ export class ElasticStarRating implements ComponentInterface {
     console.log('createTable:', await (await fetch(url.toString())).json());
 
     url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query')
-    params = {query: `{rating(host: "${this.host}", userId: "${this.userId}"), average(host: "${this.host}"), details(host: "${this.host}")}`}
+    params = { query: `{rating(host: "${this.host}", userId: "${this.userId}"), average(host: "${this.host}"), details(host: "${this.host}")}` }
     url.search = new URLSearchParams(params).toString();
     const response = await (await fetch(url.toString())).json()
     console.log('everything:', response);
     this.userRating = response.data.rating;
     this.averageRating = response.data.average;
-    this.ratings = JSON.parse(response.data.details);
     this.isLoading = false;
   }
 
@@ -92,15 +93,22 @@ export class ElasticStarRating implements ComponentInterface {
   @Listen('click', { target: 'window' })
   handleClick(event) {
     if (!this.el.contains(event.target)) {
-      this.displayMode = DISPLAY_MODE_S
+      this.displayMode = DISPLAY_MODE_S;
+      this.ratings = null;
     }
   }
 
-  handleShowDetails() {
+  async handleShowDetails() {
     if (this.displayMode === DISPLAY_MODE_M) {
-      this.displayMode = DISPLAY_MODE_L
+      this.displayMode = DISPLAY_MODE_L;
+      const url = new URL('https://gtrw0i4833.execute-api.us-east-1.amazonaws.com/dev/query');
+      const params = { query: `{details(host: "${this.host}")}` };
+      url.search = new URLSearchParams(params).toString();
+      const response = await (await fetch(url.toString())).json();
+      this.ratings = JSON.parse(response.data.details);
     } else if (this.displayMode === DISPLAY_MODE_L) {
       this.displayMode = DISPLAY_MODE_M;
+      this.ratings = null;
     }
   }
 
@@ -144,26 +152,3 @@ export class ElasticStarRating implements ComponentInterface {
   }
 }
 
-// userRatings = {
-//   userId1: {
-//     host1: 3,
-//     host2: 4
-//   },
-//   userId2: {
-//     host2: 2,
-//     host3: 9
-//   },
-// }
-
-// hostRatings = {
-//   host1: [1, 2, 3, 4, 5],
-//   host2: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
-// }
-
-/*
-endpoints: fetchUserRating, fetchHostAverage, fetchHostRatings
-rateHost
-
-
-
-*/

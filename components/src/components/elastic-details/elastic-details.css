@@ -36,3 +36,11 @@
   margin-left: 5px;
   font-weight: bold;
 }
+
+.loader {
+  display: block;
+  margin: auto;
+  width: 100px;
+  height: 200px;
+  transform: rotateZ(90deg);
+}
