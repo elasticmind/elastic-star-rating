@@ -1,15 +1,11 @@
 <template>
   <div class="hello">
-    <h1>Warm welcome, {{ id }}!</h1>
+    <h1>Warm welcome!</h1>
   </div>
 </template>
 
 <script>
-export default {
-  props: {
-    id: String
-  }
-}
+export default {}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

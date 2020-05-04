@@ -1,11 +1,113 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <Greeting :id="'1234'"/>
+    <Greeting />
     <p>
       This is my amazing Vue app. Not convinced? You have to rate it to see it!
     </p>
-    <elastic-star-rating :max-rating="5" style="position: absolute; top: 0;"></elastic-star-rating>
+    <elastic-star-rating :max-rating="5" style="display: block; position: absolute; top: 100px;"></elastic-star-rating>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
+    <p>
+      This is my amazing Vue app. Not convinced? You have to rate it to see it!
+    </p>
   </div>
 </template>
 

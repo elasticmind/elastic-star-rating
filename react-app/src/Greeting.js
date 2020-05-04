@@ -1,7 +1,7 @@
 import React from 'react';
 
-export const Greeting = ({ id }) => (
+export const Greeting = () => (
   <div>
-    <h1>Warm welcome, { id }!</h1>
+    <h1>Warm welcome!</h1>
   </div>
 );
