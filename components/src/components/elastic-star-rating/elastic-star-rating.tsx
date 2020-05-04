@@ -98,13 +98,25 @@ export class ElasticStarRating implements ComponentInterface {
 
   async handleRating(event) {
     await mutation({ rate: { host: this.host, userId: this.userId, rating: event.detail } });
+
+    const updateQuery = { average: { host: this.host } };
+    if (this.displayMode === DISPLAY_MODE_L) {
+      Object.assign(updateQuery, { details: { host: this.host } });
+    }
+
+    const response = await query(updateQuery);
+    this.averageRating = response.data.average;
+    if (this.displayMode === DISPLAY_MODE_L) {
+      this.ratings = JSON.parse(response.data.details);
+    }
+    
     this.userRating = event.detail;
   }
 
   render() {
     const ContentUpper = () => <div class="stars-wrapper">
       {this.displayMode === DISPLAY_MODE_S
-        ? <elastic-star class="star-decoration" active />
+        ? <elastic-star class="star-decoration" active={!!this.userRating} />
         : <elastic-stars max-rating={this.maxRating} value={this.userRating} onRate={this.handleRating.bind(this)} />
       }
     </div>
