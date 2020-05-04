@@ -5,8 +5,9 @@
 .loader {
   position: absolute;
   width: 100%;
-  height: 50%;
+  height: 100%;
   will-change: transform;
+  transform-origin: center center;
 }
 
 .loader > div {
@@ -17,21 +18,8 @@
   left: 50%;
 }
 
-.loader:nth-of-type(1), .loader:nth-of-type(2) {
-  top: 0%;
-  transform-origin: center center;
-  animation: 1s ease-out 0s infinite rotate-clockwise;
-}
-
-.loader:nth-of-type(3), .loader:nth-of-type(4) {
-  top: 50%;
-  /* transform: translateY(-100%); */
-  transform-origin: center center;
-  animation: 2s ease-out 0s infinite rotate-counter-clockwise;
-}
-
 .loader:nth-of-type(1) {
-  animation-delay: 0s;
+  animation: 1s linear 0s infinite rotate-clockwise;
 }
 
 .loader:nth-of-type(1) > div {
@@ -39,7 +27,7 @@
 }
 
 .loader:nth-of-type(2) {
-  animation-delay: 0.25s;
+  animation: 1.2s linear 0.2s infinite rotate-clockwise;
 }
 
 .loader:nth-of-type(2) > div {
@@ -47,7 +35,7 @@
 }
 
 .loader:nth-of-type(3) {
-  animation-delay: 0.5s;
+  animation: 1.4s linear 0.4s infinite rotate-clockwise;
 }
 
 .loader:nth-of-type(3) > div{
@@ -55,7 +43,7 @@
 }
 
 .loader:nth-of-type(4) {
-  animation-delay: 0.75s;
+  animation: 1.6s linear 0.6s infinite rotate-clockwise;
 }
 
 .loader:nth-of-type(4) > div {

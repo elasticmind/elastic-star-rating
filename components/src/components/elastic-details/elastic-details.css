@@ -40,7 +40,6 @@
 .loader {
   display: block;
   margin: auto;
-  width: 100px;
-  height: 200px;
-  transform: rotateZ(90deg);
+  width: 60%;
+  padding-bottom: 100%;
 }
